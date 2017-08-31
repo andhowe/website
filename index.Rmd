@@ -16,10 +16,10 @@ For a paragraph, just type normally.
 
 column 1 | column 2
 ---|---
-Phillies | National
-Yankees | American
-Cubs | National
-Red Sox | American
+Liverpool | PL
+LAFC | MLS
+Roma | Serie A
+Dortmund | Bundesliga
 
 <img src="bigfishofdatascience.jpg" width="300" />
 
