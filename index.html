@@ -120,11 +120,13 @@ $(document).ready(function () {
 </div>
 
 
-<div id="filtering-rows-and-columns" class="section level2">
-<h2>Filtering Rows and Columns</h2>
+<div id="filtering-rows-and-columns" class="section level1">
+<h1>Filtering Rows and Columns</h1>
 <p>With SQL, you can filter columns with SELECT and rows with WHERE. Let’s look at an example using THE lahman baseball database. First, we need to load some packages.</p>
 <pre class="r"><code>library(Lahman)
 library(sqldf)</code></pre>
+<div id="example-1" class="section level4">
+<h4>Example 1</h4>
 <p>Suppose we want to see the homerun totals for the 1927 Yankees. We could write the following:</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID,yearID,TEAMid,HR FROM Batting
 WHERE teamID='NYA' and yearID=1927&quot;
@@ -156,7 +158,10 @@ sqldf(query)</code></pre>
 ## 24 thomamy01   1927    NYA  0
 ## 25  weraju01   1927    NYA  1</code></pre>
 <hr />
-<p>Here are some more examples from class on 9/7/17:</p>
+</div>
+<div id="example-2" class="section level4">
+<h4>Example 2</h4>
+<p>Here, we can see all players from Yankees that have scored at least 40 homeruns.</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID,teamID,yearID,HR FROM Batting 
 WHERE teamID='NYA' and HR&gt;=40&quot;
 
@@ -193,6 +198,10 @@ sqldf(query)</code></pre>
 ## 29 grandcu01    NYA   2011 41
 ## 30 grandcu01    NYA   2012 43</code></pre>
 <hr />
+</div>
+<div id="example-3" class="section level4">
+<h4>Example 3</h4>
+<p>Here, we can see those players who had 40 homeruns but didn’t have more than 60 strikeouts.</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID,yearID,HR,SO FROM Batting
 WHERE HR&gt;40 and SO&lt;60&quot;
 
@@ -227,6 +236,10 @@ sqldf(query)</code></pre>
 ## 27 pujolal01   2004 46 52
 ## 28 pujolal01   2006 49 50</code></pre>
 <hr />
+</div>
+<div id="example-4" class="section level4">
+<h4>Example 4</h4>
+<p>We can also see the statistics from 1970’s for Phillies for all players who have had more than 30 homeruns.</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID,teamID,yearID,HR FROM Batting
 WHERE teamID='PHI' and HR&gt;30 and yearID&lt;=1979 and yearID&gt;=1970&quot;
 
@@ -242,6 +255,13 @@ sqldf(query)</code></pre>
 ## 8 luzingr01    PHI   1978 35
 ## 9 schmimi01    PHI   1979 45</code></pre>
 <hr />
+</div>
+</div>
+<div id="order-by" class="section level1">
+<h1>Order By</h1>
+<div id="example-1-1" class="section level4">
+<h4>Example 1</h4>
+<p>We can also arrange them by descending order of number of homeruns.</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID,yearID,teamID,HR FROM Batting
 WHERE HR&gt;50
 ORDER BY HR DESC&quot;
@@ -285,6 +305,10 @@ sqldf(query)</code></pre>
 ## 35 fieldce01   1990    DET 51
 ## 36 jonesan01   2005    ATL 51</code></pre>
 <hr />
+</div>
+<div id="example-2-1" class="section level4">
+<h4>Example 2</h4>
+<p>We can narrow down the search for players that had at least 400 at bats but had less than 10 strikeouts and arrange it by the least amount of strikeouts.</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID,yearID,teamID,SO,AB FROM Batting
 WHERE SO&lt;10 and AB&gt;=400
 ORDER BY SO ASC&quot;
@@ -357,6 +381,13 @@ sqldf(query)</code></pre>
 ## 64 boudrlo01   1948    CLE  9 560
 ## 65 mitchda01   1952    CLE  9 511</code></pre>
 <hr />
+</div>
+</div>
+<div id="aggregation" class="section level1">
+<h1>Aggregation</h1>
+<p>We can narrow down the output by using aggregation</p>
+<div id="example-1-2" class="section level4">
+<h4>Example 1</h4>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID, sum(HR) FROM Batting
 WHERE playerID='ruthba01'
 GROUP BY playerID&quot;
@@ -365,6 +396,9 @@ sqldf(query)</code></pre>
 <pre><code>##   playerID sum(HR)
 ## 1 ruthba01     714</code></pre>
 <hr />
+</div>
+<div id="example-2-2" class="section level4">
+<h4>Example 2</h4>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID, sum(HR) FROM Batting
 GROUP BY playerID
 HAVING avg(HR)&gt;30
@@ -386,6 +420,13 @@ sqldf(query)</code></pre>
 ## 12 schmimi01     548
 ## 13 abreujo02      91</code></pre>
 <hr />
+</div>
+</div>
+<div id="joining" class="section level1">
+<h1>Joining</h1>
+<p>Joining allows data from multiple tables to be used together by using the commands INNER JOIN and ON.</p>
+<div id="example-1-3" class="section level4">
+<h4>Example 1</h4>
 <pre class="r"><code>query&lt;-&quot;SELECT nameFirst,nameLast,yearID,teamID,HR 
 FROM Batting INNER JOIN Master
 ON Batting.playerID=Master.playerID
@@ -416,6 +457,9 @@ sqldf(query)</code></pre>
 ## 21      Babe     Ruth   1934    NYA 22
 ## 22      Babe     Ruth   1935    BSN  6</code></pre>
 <hr />
+</div>
+<div id="example-2-3" class="section level4">
+<h4>Example 2</h4>
 <pre class="r"><code>query&lt;-&quot;SELECT nameFirst,nameLast,avg(salary)
 FROM Salaries INNER JOIN Master
 ON Salaries.playerID=Master.playerID
@@ -435,6 +479,7 @@ sqldf(query)</code></pre>
 ## 7       Bob     Boone     1047580
 ## 8       Bob     Ojeda     1035926</code></pre>
 <hr />
+</div>
 </div>
 
 

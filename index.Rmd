@@ -3,17 +3,16 @@ title: 'SQL'
 output: html_document
 ---
 
-## Filtering Rows and Columns
+#Filtering Rows and Columns
 
 With SQL, you can filter columns with SELECT and rows with WHERE.  Let's look at an example using THE lahman baseball database.  First, we need to load some packages.
-
 ```{r warning=FALSE, message=FALSE}
 library(Lahman)
 library(sqldf)
 ```
 
+####Example 1
 Suppose we want to see the homerun totals for the 1927 Yankees.  We could write the following:
-
 ```{r}
 query<-"SELECT playerID,yearID,TEAMid,HR FROM Batting
 WHERE teamID='NYA' and yearID=1927"
@@ -21,8 +20,8 @@ sqldf(query)
 ```
 ***
 
-Here are some more examples from class on 9/7/17:
-
+####Example 2
+Here, we can see all players from Yankees that have scored at least 40 homeruns.
 ```{r}
 query<-"SELECT playerID,teamID,yearID,HR FROM Batting 
 WHERE teamID='NYA' and HR>=40"
@@ -30,6 +29,9 @@ WHERE teamID='NYA' and HR>=40"
 sqldf(query)
 ```
 ***
+
+####Example 3
+Here, we can see those players who had 40 homeruns but didn’t have more than 60 strikeouts.
 ```{r}
 query<-"SELECT playerID,yearID,HR,SO FROM Batting
 WHERE HR>40 and SO<60"
@@ -37,6 +39,9 @@ WHERE HR>40 and SO<60"
 sqldf(query)
 ```
 ***
+
+####Example 4
+We can also see the statistics from 1970’s for Phillies for all players who have had more than 30 homeruns.
 ```{r}
 query<-"SELECT playerID,teamID,yearID,HR FROM Batting
 WHERE teamID='PHI' and HR>30 and yearID<=1979 and yearID>=1970"
@@ -44,6 +49,10 @@ WHERE teamID='PHI' and HR>30 and yearID<=1979 and yearID>=1970"
 sqldf(query)
 ```
 ***
+
+#Order By
+####Example 1
+We can also arrange them by descending order of number of homeruns.
 ```{r}
 query<-"SELECT playerID,yearID,teamID,HR FROM Batting
 WHERE HR>50
@@ -52,6 +61,9 @@ ORDER BY HR DESC"
 sqldf(query)
 ```
 ***
+
+####Example 2
+We can narrow down the search for players that had at least 400 at bats but had less than 10 strikeouts and arrange it by the least amount of strikeouts.
 ```{r}
 query<-"SELECT playerID,yearID,teamID,SO,AB FROM Batting
 WHERE SO<10 and AB>=400
@@ -60,6 +72,12 @@ ORDER BY SO ASC"
 sqldf(query)
 ```
 ***
+
+
+#Aggregation
+We can narrow down the output by using aggregation
+
+####Example 1
 ```{r}
 query<-"SELECT playerID, sum(HR) FROM Batting
 WHERE playerID='ruthba01'
@@ -68,6 +86,8 @@ GROUP BY playerID"
 sqldf(query)
 ```
 ***
+
+####Example 2
 ```{r}
 query<-"SELECT playerID, sum(HR) FROM Batting
 GROUP BY playerID
@@ -77,6 +97,11 @@ ORDER BY avg(HR) DESC"
 sqldf(query)
 ```
 ***
+
+#Joining
+Joining allows data from multiple tables to be used together by using the commands INNER JOIN and ON.
+
+####Example 1
 ```{r}
 query<-"SELECT nameFirst,nameLast,yearID,teamID,HR 
 FROM Batting INNER JOIN Master
@@ -86,6 +111,7 @@ WHERE Batting.playerID='ruthba01'"
 sqldf(query)
 ```
 ***
+####Example 2
 ```{r}
 query<-"SELECT nameFirst,nameLast,avg(salary)
 FROM Salaries INNER JOIN Master
